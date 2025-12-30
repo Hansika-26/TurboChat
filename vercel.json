@@ -1,4 +1,5 @@
 {
   "rootDirectory": "frontend",
-  "outputDirectory": "dist"
+  "outputDirectory": "dist",
+  "buildCommand": "npm run build"
 }
