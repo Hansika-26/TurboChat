@@ -1,9 +1,17 @@
-import { MessageSquare } from "lucide-react";
+import { MessageCircle } from "lucide-react";
 
 const NoChatSelected = () => {
   return (
-    <div className="w-full flex flex-1 flex-col items-center justify-center p-16 bg-base-100/50">
-      <div className="max-w-md text-center space-y-6">
+    <div className="w-full flex flex-1 flex-col items-center justify-center p-16 bg-base-100/50 relative">
+      {/* Background Pattern */}
+      <div className="absolute inset-0 opacity-5 pointer-events-none z-0">
+        <div className="w-full h-full" style={{
+          backgroundImage: `linear-gradient(currentColor 1px, transparent 1px), linear-gradient(90deg, currentColor 1px, transparent 1px)`,
+          backgroundSize: '40px 40px'
+        }}></div>
+      </div>
+
+      <div className="max-w-md text-center space-y-6 relative z-10">
         {/* Icon Display */}
         <div className="flex justify-center gap-4 mb-4">
           <div className="relative">
@@ -11,7 +19,7 @@ const NoChatSelected = () => {
               className="w-16 h-16 rounded-2xl bg-primary/10 flex items-center
              justify-center animate-bounce"
             >
-              <MessageSquare className="w-8 h-8 text-primary " />
+              <MessageCircle className="w-8 h-8 text-primary " />
             </div>
           </div>
         </div>

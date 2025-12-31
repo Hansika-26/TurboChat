@@ -9,6 +9,7 @@ import ProfilePage from "./pages/ProfilePage";
 import { Routes, Route, Navigate } from "react-router-dom";
 import { useAuthStore } from "./store/useAuthStore";
 import { useThemeStore } from "./store/useThemeStore";
+import { useSettingsStore } from "./store/useSettingsStore";
 import { useEffect } from "react";
 
 import { Loader } from "lucide-react";
@@ -23,6 +24,20 @@ const App = () => {
   useEffect(() => {
     checkAuth();
   }, [checkAuth]);
+
+  // Apply font size globally
+  const { fontSize } = useSettingsStore();
+
+  useEffect(() => {
+    const html = document.documentElement;
+    html.setAttribute("data-font-size", fontSize);
+
+    // Also set a CSS variable for easier usage if needed
+    if (fontSize === "small") html.style.fontSize = "14px";
+    else if (fontSize === "large") html.style.fontSize = "18px";
+    else html.style.fontSize = "16px"; // medium/default
+
+  }, [fontSize]);
 
   console.log({ authUser });
 

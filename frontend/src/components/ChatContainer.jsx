@@ -21,11 +21,7 @@ const ChatContainer = () => {
 
   useEffect(() => {
     getMessages(selectedUser._id);
-
-    subscribeToMessages();
-
-    return () => unsubscribeFromMessages();
-  }, [selectedUser._id, getMessages, subscribeToMessages, unsubscribeFromMessages]);
+  }, [selectedUser._id, getMessages]);
 
   useEffect(() => {
     if (messageEndRef.current && messages) {
@@ -44,10 +40,21 @@ const ChatContainer = () => {
   }
 
   return (
-    <div className="flex-1 flex flex-col overflow-auto">
+    <div className="flex-1 flex flex-col overflow-auto relative">
       <ChatHeader />
 
-      <div className="flex-1 overflow-y-auto p-4 space-y-4">
+      {/* Background Pattern */}
+      <div className="absolute inset-0 opacity-40 pointer-events-none z-0">
+        <div className="w-full h-full" style={{
+          backgroundImage: `url("/bg.png")`,
+          backgroundSize: '300px', // Adjust size as needed, or 'cover'
+          backgroundRepeat: 'repeat',
+          backgroundPosition: 'center',
+          filter: 'grayscale(100%) opacity(0.6)' // Increased internal opacity
+        }}></div>
+      </div>
+
+      <div className="flex-1 overflow-y-auto p-4 space-y-4 z-10">
         {messages.map((message) => (
           <div
             key={message._id}

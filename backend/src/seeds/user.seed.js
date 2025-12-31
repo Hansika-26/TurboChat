@@ -1,14 +1,15 @@
 import { config } from "dotenv";
 import { connectDB } from "../lib/db.js";
 import User from "../models/user.model.js";
+import bcrypt from "bcryptjs"; // Assuming you're using bcryptjs for hashing
 
 config();
 
 const seedUsers = [
   // Female Users
   {
-    email: "emma.thompson@example.com",
-    fullname: "Emma Thompson",
+    email: "amasha.thompson@example.com",
+    fullname: "Amasha Thompson",
     password: "123456",
     profilePic: "https://randomuser.me/api/portraits/women/1.jpg",
   },
@@ -19,26 +20,26 @@ const seedUsers = [
     profilePic: "https://randomuser.me/api/portraits/women/2.jpg",
   },
   {
-    email: "sophia.davis@example.com",
-    fullname: "Sophia Davis",
+    email: "tinny.davis@example.com",
+    fullname: "Tinny Davis",
     password: "123456",
     profilePic: "https://randomuser.me/api/portraits/women/3.jpg",
   },
   {
-    email: "ava.wilson@example.com",
-    fullname: "Ava Wilson",
+    email: "Jenny.wilson@example.com",
+    fullname: "Jenny Wilson",
     password: "123456",
     profilePic: "https://randomuser.me/api/portraits/women/4.jpg",
   },
   {
-    email: "isabella.brown@example.com",
-    fullname: "Isabella Brown",
+    email: "kaveena.brown@example.com",
+    fullname: "kaveena Brown",
     password: "123456",
     profilePic: "https://randomuser.me/api/portraits/women/5.jpg",
   },
   {
-    email: "mia.johnson@example.com",
-    fullname: "Mia Johnson",
+    email: "rainy.johnson@example.com",
+    fullname: "Rainy Johnson",
     password: "123456",
     profilePic: "https://randomuser.me/api/portraits/women/6.jpg",
   },
@@ -57,8 +58,8 @@ const seedUsers = [
 
   // Male Users
   {
-    email: "james.anderson@example.com",
-    fullname: "James Anderson",
+    email: "ayosh.anderson@example.com",
+    fullname: "Ayosh Anderson",
     password: "123456",
     profilePic: "https://randomuser.me/api/portraits/men/1.jpg",
   },
@@ -69,8 +70,8 @@ const seedUsers = [
     profilePic: "https://randomuser.me/api/portraits/men/2.jpg",
   },
   {
-    email: "benjamin.taylor@example.com",
-    fullname: "Benjamin Taylor",
+    email: "charlie.taylor@example.com",
+    fullname: "Charlie Taylor",
     password: "123456",
     profilePic: "https://randomuser.me/api/portraits/men/3.jpg",
   },
@@ -104,7 +105,16 @@ const seedDatabase = async () => {
   try {
     await connectDB();
 
-    await User.insertMany(seedUsers);
+    // Clear existing users
+    await User.deleteMany({});
+
+    // Hash passwords and save each user to trigger pre-save hooks
+    for (const userData of seedUsers) {
+      const hashedPassword = await bcrypt.hash(userData.password, 10);
+      const user = new User({ ...userData, password: hashedPassword });
+      await user.save();
+    }
+
     console.log("Database seeded successfully");
   } catch (error) {
     console.error("Error seeding database:", error);
