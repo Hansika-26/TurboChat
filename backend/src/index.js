@@ -25,6 +25,7 @@ app.use(cors({
         const allowedOrigins = [
             "http://localhost:5173",
             "http://localhost:5174",
+            "https://turbo-chat2.vercel.app",
             process.env.FRONTEND_URL?.replace(/\/$/, "")
         ].filter(Boolean);
 
@@ -36,6 +37,8 @@ app.use(cors({
         }
     },
     credentials: true,
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization", "Cookie"]
 }));
 
 app.use("/api/auth", authRoutes);
