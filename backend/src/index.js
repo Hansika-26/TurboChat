@@ -37,6 +37,7 @@ if (process.env.NODE_ENV === "production") {
 }
 server.listen(PORT, () => {
     console.log("server is running on port " + PORT);
+    console.log("Frontend URL configured as: " + process.env.FRONTEND_URL);
     connectDB();
 });
 
