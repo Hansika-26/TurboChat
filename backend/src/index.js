@@ -15,15 +15,28 @@ const __dirname = path.resolve();
 
 app.use(express.json({ limit: "4mb" }));
 app.use(cookieParser());
+app.use((req, res, next) => {
+    console.log("Request Origin:", req.headers.origin);
+    next();
+});
+
 app.use(cors({
-    origin: [
-        "http://localhost:5173",
-        "http://localhost:5174",
-        process.env.FRONTEND_URL
-    ].filter(Boolean),
+    origin: (origin, callback) => {
+        const allowedOrigins = [
+            "http://localhost:5173",
+            "http://localhost:5174",
+            process.env.FRONTEND_URL?.replace(/\/$/, "")
+        ].filter(Boolean);
+
+        if (!origin || allowedOrigins.includes(origin.replace(/\/$/, ""))) {
+            callback(null, true);
+        } else {
+            console.error("Blocked by CORS:", origin);
+            callback(new Error("Not allowed by CORS"));
+        }
+    },
     credentials: true,
-}
-))
+}));
 
 app.use("/api/auth", authRoutes);
 app.use("/api/messages", messageRoutes);
